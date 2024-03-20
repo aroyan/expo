@@ -20,7 +20,7 @@ private let defaultQueue = DispatchQueue(label: "expo.modules.AsyncFunctionQueue
 /**
  Represents a function that can only be called asynchronously, thus its JavaScript equivalent returns a Promise.
  */
-public final class AsyncFunctionDefinition<Args, FirstArgType, ReturnType>: AnyAsyncFunctionDefinition {
+public class AsyncFunctionDefinition<Args, FirstArgType, ReturnType>: AnyAsyncFunctionDefinition {
   typealias ClosureType = (Args) throws -> ReturnType
 
   /**
@@ -118,11 +118,11 @@ public final class AsyncFunctionDefinition<Args, FirstArgType, ReturnType>: AnyA
   // MARK: - JavaScriptObjectBuilder
 
   func build(appContext: AppContext) throws -> JavaScriptObject {
-    return try appContext.runtime.createAsyncFunction(name, argsCount: argumentsCount) { [weak self, name] this, args, resolve, reject in
-      guard let self = self else {
-        let exception = NativeFunctionUnavailableException(name)
-        return reject(exception.code, exception.description, nil)
-      }
+    return try appContext.runtime.createAsyncFunction(name, argsCount: argumentsCount) { [self, name] this, args, resolve, reject in
+//      guard let self = self else {
+//        let exception = NativeFunctionUnavailableException(name)
+//        return reject(exception.code, exception.description, nil)
+//      }
       self.call(by: this, withArguments: args, appContext: appContext) { result in
         switch result {
         case .failure(let error):

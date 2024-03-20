@@ -42,13 +42,18 @@ public func Events(_ names: [String]) -> EventsDefinition {
 /**
  Function that is invoked when the first event listener is added.
  */
-public func OnStartObserving(@_implicitSelfCapture _ body: @escaping () -> Void) -> AsyncFunctionDefinition<(), Void, Void> {
-  return AsyncFunctionDefinition("startObserving", firstArgType: Void.self, dynamicArgumentTypes: [], body)
+//@available(*, deprecated, message: "Deprecated in favor of OnStartObserving(\"eventName\") {}")
+//public func OnStartObserving(@_implicitSelfCapture _ closure: @escaping () -> Void) -> EventObservingDefinition<Void> {
+//  return EventObservingDefinition(type: .startObserving, event: nil, closure)
+//}
+
+public func OnStartObserving(_ event: String? = nil, @_implicitSelfCapture _ closure: @escaping () -> ()) -> EventObservingDefinition {
+  return EventObservingDefinition(type: .startObserving, event: event, closure)
 }
 
 /**
  Function that is invoked when all event listeners are removed.
  */
-public func OnStopObserving(@_implicitSelfCapture _ body: @escaping () -> Void) -> AsyncFunctionDefinition<(), Void, Void> {
-  return AsyncFunctionDefinition("stopObserving", firstArgType: Void.self, dynamicArgumentTypes: [], body)
+public func OnStopObserving(_ event: String? = nil, @_implicitSelfCapture _ closure: @escaping () -> ()) -> EventObservingDefinition {
+  return EventObservingDefinition(type: .stopObserving, event: event, closure)
 }
